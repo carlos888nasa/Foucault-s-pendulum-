@@ -1,0 +1,1023 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 14.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[     44148,       1013]
+NotebookOptionsPosition[     41290,        971]
+NotebookOutlinePosition[     41731,        988]
+CellTagsIndexPosition[     41688,        985]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ClearAll", "[", "\"\<Global`*\>\"", "]"}], "\[IndentingNewLine]", 
+  "\n", 
+  RowBox[{"(*", 
+   RowBox[{
+   "Variables", " ", "de", " ", "control", " ", "para", " ", 
+    "optimizaci\[OAcute]n", " ", "del", " ", "c\[AAcute]lculo", " ", "del", " ",
+     "modelo", " ", "cl\[AAcute]sico"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Theta]0tmp", "=", 
+   RowBox[{"-", "1"}]}], ";", 
+  RowBox[{"Ltmp", "=", 
+   RowBox[{"-", "1"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Dynamic", "[", "n", "]"}], ";", 
+   RowBox[{"n", "=", "0"}], ";"}], "\[IndentingNewLine]", "\n", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"Definici\[OAcute]n", " ", "de", " ", "\[Theta]"}], ",", 
+    "\[Omega]", ",", 
+    RowBox[{
+    "\[Alpha]", " ", "con", " ", "memoizaci\[OAcute]n", " ", "controlada"}]}],
+    "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"\[Theta]", "[", 
+     RowBox[{"\[Theta]0_", ",", "L_", ",", "t_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"g", ",", "\[CapitalTheta]", ",", "\[Tau]"}], "}"}], ",", 
+      RowBox[{
+       RowBox[{"g", "=", "10"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"\[Theta]0", "===", "\[Theta]0tmp"}], "&&", 
+          RowBox[{"L", "===", "Ltmp"}]}], ",", 
+         RowBox[{"s", "[", "t", "]"}], ",", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"s", "=", 
+            RowBox[{"NDSolveValue", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"g", " ", 
+                  RowBox[{"Sin", "[", 
+                   RowBox[{"\[CapitalTheta]", "[", "\[Tau]", "]"}], "]"}]}], "==", 
+                 RowBox[{
+                  RowBox[{"-", "L"}], " ", 
+                  RowBox[{
+                   RowBox[{"\[CapitalTheta]", "''"}], "[", "\[Tau]", 
+                   "]"}]}]}], ",", 
+                RowBox[{
+                 RowBox[{"\[CapitalTheta]", "[", "0", "]"}], "==", 
+                 "\[Theta]0"}], ",", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"\[CapitalTheta]", "'"}], "[", "0", "]"}], "==", 
+                 "0"}]}], "}"}], ",", "\[CapitalTheta]", ",", 
+              RowBox[{"{", 
+               RowBox[{"\[Tau]", ",", "0", ",", "10"}], "}"}]}], "]"}]}], ";",
+            "\[IndentingNewLine]", 
+           RowBox[{"\[Theta]0tmp", "=", "\[Theta]0"}], ";", 
+           RowBox[{"Ltmp", "=", "L"}], ";", "\[IndentingNewLine]", 
+           RowBox[{"n", "++"}], ";", "\[IndentingNewLine]", 
+           RowBox[{"s", "[", "t", "]"}]}], ")"}]}], "]"}]}]}], "]"}]}], ";"}],
+   "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"\[Omega]", "[", 
+    RowBox[{"\[Theta]0_", ",", "L_", ",", "\[Tau]_"}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{"D", "[", 
+     RowBox[{
+      RowBox[{"\[Theta]", "[", 
+       RowBox[{"\[Theta]0", ",", "L", ",", "t"}], "]"}], ",", "t"}], "]"}], "/.",
+     " ", 
+    RowBox[{"t", "->", "\[Tau]"}]}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"\[Alpha]", "[", 
+     RowBox[{"\[Theta]0_", ",", "L_", ",", "\[Tau]_"}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"D", "[", 
+      RowBox[{
+       RowBox[{"\[Theta]", "[", 
+        RowBox[{"\[Theta]0", ",", "L", ",", "t"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"t", ",", "2"}], "}"}]}], "]"}], "/.", " ", 
+     RowBox[{"t", "->", "\[Tau]"}]}]}], ";"}], "\[IndentingNewLine]", "\n", 
+  RowBox[{"(*", 
+   RowBox[{
+   "Vector", " ", "posici\[OAcute]n", " ", "en", " ", "base", " ", "al", " ", 
+    "\[AAcute]ngulo"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"r", "[", "\[Theta]_", "]"}], ":=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"Sin", "[", "\[Theta]", "]"}], ",", 
+     RowBox[{"-", 
+      RowBox[{"Cos", "[", "\[Theta]", "]"}]}]}], "}"}]}], 
+  "\[IndentingNewLine]", "\n", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"Modelo", " ", 
+     RowBox[{"cl\[AAcute]sico", ":", "cuerda"}]}], ",", "masa", ",", 
+    "velocidad"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"cuerda", "[", 
+    RowBox[{"\[Theta]0_", ",", "L_", ",", "t_"}], "]"}], ":=", 
+   RowBox[{"Graphics", "[", 
+    RowBox[{"{", 
+     RowBox[{"Gray", ",", 
+      RowBox[{"Line", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0"}], "}"}], ",", 
+         RowBox[{"L", " ", 
+          RowBox[{"r", "[", 
+           RowBox[{"\[Theta]", "[", 
+            RowBox[{"\[Theta]0", ",", "L", ",", "t"}], "]"}], "]"}]}]}], 
+        "}"}], "]"}]}], "}"}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"objeto", "[", 
+    RowBox[{"\[Theta]0_", ",", "L_", ",", "t_"}], "]"}], ":=", 
+   RowBox[{"Graphics", "[", 
+    RowBox[{"{", 
+     RowBox[{"Gray", ",", 
+      RowBox[{"Disk", "[", 
+       RowBox[{
+        RowBox[{"L", " ", 
+         RowBox[{"r", "[", 
+          RowBox[{"\[Theta]", "[", 
+           RowBox[{"\[Theta]0", ",", "L", ",", "t"}], "]"}], "]"}]}], ",", 
+        RowBox[{"0.1", " ", "L"}]}], "]"}]}], "}"}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"velocidad", "[", 
+     RowBox[{"\[Theta]0_", ",", "L_", ",", "t_"}], "]"}], ":=", 
+    RowBox[{"Graphics", "[", 
+     RowBox[{"{", 
+      RowBox[{"Blue", ",", 
+       RowBox[{"Arrow", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"L", " ", 
+           RowBox[{"r", "[", 
+            RowBox[{"\[Theta]", "[", 
+             RowBox[{"\[Theta]0", ",", "L", ",", "t"}], "]"}], "]"}]}], ",", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"L", " ", 
+             RowBox[{"r", "[", 
+              RowBox[{"\[Theta]", "[", 
+               RowBox[{"\[Theta]0", ",", "L", ",", "t"}], "]"}], "]"}]}], "+", 
+            RowBox[{
+             RowBox[{"L", "/", "5"}], " ", 
+             RowBox[{"D", "[", 
+              RowBox[{
+               RowBox[{"r", "[", 
+                RowBox[{"\[Theta]", "[", 
+                 RowBox[{"\[Theta]0", ",", "L", ",", "\[Tau]"}], "]"}], "]"}],
+                ",", "\[Tau]"}], "]"}]}]}], "/.", " ", 
+           RowBox[{"\[Tau]", "->", "t"}]}]}], "}"}], "]"}]}], "}"}], "]"}]}], 
+   ";"}], "\[IndentingNewLine]", "\n", 
+  RowBox[{"(*", 
+   RowBox[{
+   "Gr\[AAcute]fica", " ", "de", " ", "desplazamiento", " ", "angular"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"graficas", "[", 
+     RowBox[{"\[Theta]0_", ",", "L_", ",", "t_"}], "]"}], ":=", 
+    RowBox[{"Plot", "[", 
+     RowBox[{
+      RowBox[{"\[Theta]", "[", 
+       RowBox[{"\[Theta]0", ",", "L", ",", "\[Tau]"}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\[Tau]", ",", "0", ",", "t"}], "}"}], ",", 
+      RowBox[{"PlotRange", "->", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "\[Theta]0"}], ",", "\[Theta]0"}], "}"}]}], ",", 
+      RowBox[{"PlotStyle", "->", "Black"}], ",", 
+      RowBox[{"Axes", "->", "False"}], ",", 
+      RowBox[{"GridLines", "->", "Automatic"}], ",", 
+      RowBox[{"Frame", "->", "True"}], ",", 
+      RowBox[{"FrameLabel", "->", 
+       RowBox[{"{", 
+        RowBox[{"\"\<Tiempo (s)\>\"", 
+         ",", "\"\<Desplazamiento angular (rad)\>\""}], "}"}]}]}], "]"}]}], 
+   ";"}], "\[IndentingNewLine]", "\n", 
+  RowBox[{"(*", 
+   RowBox[{"Simulador", " ", "cl\[AAcute]sico"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"simuladorClasico", "[", 
+     RowBox[{"\[Theta]0_", ",", "L_", ",", "t_"}], "]"}], ":=", 
+    RowBox[{"Show", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"cuerda", "[", 
+         RowBox[{"\[Theta]0", ",", "L", ",", "t"}], "]"}], ",", 
+        RowBox[{"objeto", "[", 
+         RowBox[{"\[Theta]0", ",", "L", ",", "t"}], "]"}], ",", 
+        RowBox[{"velocidad", "[", 
+         RowBox[{"\[Theta]0", ",", "L", ",", "t"}], "]"}]}], "}"}], ",", 
+      RowBox[{"Axes", "->", "True"}], ",", 
+      RowBox[{"PlotRange", "->", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"-", "L"}], ",", "L"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"-", "1.1"}], " ", "L"}], ",", "0"}], "}"}]}], "}"}]}], ",", 
+      RowBox[{"AspectRatio", "->", "1"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"PARTE", " ", "CORIOLIS"}], "*)"}], "\[IndentingNewLine]", "\n", 
+  RowBox[{"(*", 
+   RowBox[{"Par\[AAcute]metros", " ", "f\[IAcute]sicos"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"g", "=", "9.81"}], ";"}], " ", 
+  RowBox[{"(*", "gravedad", "*)"}]}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"\[CapitalOmega]", "=", 
+    RowBox[{"7.2921", "*", 
+     RowBox[{"10", "^", 
+      RowBox[{"-", "5"}]}]}]}], ";"}], " ", 
+  RowBox[{"(*", 
+   RowBox[{"rotaci\[OAcute]n", " ", "terrestre", " ", "en", " ", 
+    RowBox[{"rad", "/", "s"}]}], "*)"}], "\[IndentingNewLine]", "\n", 
+  RowBox[{"(*", 
+   RowBox[{
+   "Simulaci\[OAcute]n", " ", "Coriolis", " ", "generalizada", " ", "con", " ",
+     "latitud", " ", "variable"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"solucionCoriolis", "[", 
+     RowBox[{
+     "L_", ",", "\[Phi]_", ",", "x0_", ",", "y0_", ",", "vx0_", ",", "vy0_"}],
+      "]"}], ":=", 
+    RowBox[{"NDSolveValue", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{"x", "''"}], "[", "t", "]"}], "==", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{"-", "g"}], "/", "L"}], " ", 
+           RowBox[{"x", "[", "t", "]"}]}], "+", 
+          RowBox[{"2", " ", "\[CapitalOmega]", " ", 
+           RowBox[{"Sin", "[", "\[Phi]", "]"}], " ", 
+           RowBox[{
+            RowBox[{"y", "'"}], "[", "t", "]"}]}]}]}], ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"y", "''"}], "[", "t", "]"}], "==", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{"-", "g"}], "/", "L"}], " ", 
+           RowBox[{"y", "[", "t", "]"}]}], "-", 
+          RowBox[{"2", " ", "\[CapitalOmega]", " ", 
+           RowBox[{"Sin", "[", "\[Phi]", "]"}], " ", 
+           RowBox[{
+            RowBox[{"x", "'"}], "[", "t", "]"}]}]}]}], ",", 
+        RowBox[{
+         RowBox[{"x", "[", "0", "]"}], "==", "x0"}], ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"x", "'"}], "[", "0", "]"}], "==", "vx0"}], ",", 
+        RowBox[{
+         RowBox[{"y", "[", "0", "]"}], "==", "y0"}], ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"y", "'"}], "[", "0", "]"}], "==", "vy0"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"x", ",", "y"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"t", ",", "0", ",", "100"}], "}"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]", "\n", 
+  RowBox[{"(*", 
+   RowBox[{"Visualizaci\[OAcute]n", " ", "Coriolis"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"visualCoriolis", "[", 
+     RowBox[{"sol_", ",", "L_", ",", "t_"}], "]"}], ":=", 
+    RowBox[{"Show", "[", 
+     RowBox[{
+      RowBox[{"Graphics", "[", 
+       RowBox[{"{", 
+        RowBox[{"LightGray", ",", 
+         RowBox[{"Circle", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0"}], "}"}], ",", "L"}], "]"}], ",", "Blue", ",", 
+         RowBox[{"PointSize", "[", "Large", "]"}], ",", 
+         RowBox[{"Point", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"L", " ", 
+             RowBox[{
+              RowBox[{"sol", "[", 
+               RowBox[{"[", "1", "]"}], "]"}], "[", "t", "]"}]}], ",", 
+            RowBox[{"L", " ", 
+             RowBox[{
+              RowBox[{"sol", "[", 
+               RowBox[{"[", "2", "]"}], "]"}], "[", "t", "]"}]}]}], "}"}], 
+          "]"}], ",", "Red", ",", 
+         RowBox[{"Line", "[", 
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"L", " ", 
+               RowBox[{
+                RowBox[{"sol", "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], "[", "\[Tau]", "]"}]}], ",", 
+              RowBox[{"L", " ", 
+               RowBox[{
+                RowBox[{"sol", "[", 
+                 RowBox[{"[", "2", "]"}], "]"}], "[", "\[Tau]", "]"}]}]}], 
+             "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"\[Tau]", ",", "0", ",", "t", ",", "0.5"}], "}"}]}], 
+           "]"}], "]"}]}], "}"}], "]"}], ",", 
+      RowBox[{"Axes", "->", "True"}], ",", 
+      RowBox[{"PlotRange", "->", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"-", "L"}], ",", "L"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"-", "L"}], ",", "L"}], "}"}]}], "}"}]}], ",", 
+      RowBox[{"AspectRatio", "->", "1"}], ",", 
+      RowBox[{"Frame", "->", "True"}], ",", 
+      RowBox[{"FrameLabel", "->", 
+       RowBox[{"{", 
+        RowBox[{"\"\<X (m)\>\"", ",", "\"\<Y (m)\>\""}], "}"}]}]}], "]"}]}], 
+   ";"}], "\[IndentingNewLine]", "\n", 
+  RowBox[{"(*", 
+   RowBox[{"INTERFAZ", " ", "UNIFICADA"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", "sol", "}"}], ",", 
+     RowBox[{
+      RowBox[{"sol", "=", 
+       RowBox[{"solucionCoriolis", "[", 
+        RowBox[{"L", ",", 
+         RowBox[{"\[Phi]", " ", "Degree"}], ",", "x0", ",", "y0", ",", "vx0", 
+         ",", "vy0"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"GraphicsGrid", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"simuladorClasico", "[", 
+            RowBox[{
+             RowBox[{"\[Theta]0", " ", "Degree"}], ",", "L", ",", "t"}], 
+            "]"}], ",", 
+           RowBox[{"graficas", "[", 
+            RowBox[{
+             RowBox[{"\[Theta]0", " ", "Degree"}], ",", "L", ",", "t"}], 
+            "]"}]}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"visualCoriolis", "[", 
+            RowBox[{"sol", ",", "L", ",", "t"}], "]"}], ",", 
+           RowBox[{"Plot", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"sol", "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], "[", "\[Tau]", "]"}], ",", 
+               RowBox[{
+                RowBox[{"sol", "[", 
+                 RowBox[{"[", "2", "]"}], "]"}], "[", "\[Tau]", "]"}]}], 
+              "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"\[Tau]", ",", "0", ",", "t"}], "}"}], ",", 
+             RowBox[{"PlotRange", "->", 
+              RowBox[{"{", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"-", "1"}], ",", "1"}], "}"}], "}"}]}], ",", 
+             RowBox[{"PlotStyle", "->", 
+              RowBox[{"{", 
+               RowBox[{"Blue", ",", "Red"}], "}"}]}], ",", 
+             RowBox[{"Frame", "->", "True"}], ",", 
+             RowBox[{"FrameLabel", "->", 
+              RowBox[{"{", 
+               RowBox[{"\"\<Tiempo (s)\>\"", ",", "\"\<X, Y\>\""}], "}"}]}]}],
+             "]"}]}], "}"}]}], "}"}], "]"}]}]}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\[Theta]0", ",", "20"}], "}"}], ",", "1", ",", "80", ",", "1", 
+     ",", 
+     RowBox[{"Appearance", "->", "\"\<Labeled\>\""}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"L", ",", "10"}], "}"}], ",", "10", ",", "100", ",", "1", ",", 
+     RowBox[{"Appearance", "->", "\"\<Labeled\>\""}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\[Phi]", ",", "45"}], "}"}], ",", "0", ",", "90", ",", "1", ",", 
+     RowBox[{"Appearance", "->", "\"\<Labeled\>\""}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"x0", ",", "0.5"}], "}"}], ",", 
+     RowBox[{"-", "1"}], ",", "1", ",", "0.1", ",", 
+     RowBox[{"Appearance", "->", "\"\<Labeled\>\""}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"y0", ",", "0"}], "}"}], ",", 
+     RowBox[{"-", "1"}], ",", "1", ",", "0.1", ",", 
+     RowBox[{"Appearance", "->", "\"\<Labeled\>\""}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"vx0", ",", "0"}], "}"}], ",", 
+     RowBox[{"-", "1"}], ",", "1", ",", "0.1", ",", 
+     RowBox[{"Appearance", "->", "\"\<Labeled\>\""}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"vy0", ",", "0.5"}], "}"}], ",", 
+     RowBox[{"-", "1"}], ",", "1", ",", "0.1", ",", 
+     RowBox[{"Appearance", "->", "\"\<Labeled\>\""}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"t", ",", "0", ",", "10", ",", "0.1"}], "}"}]}], 
+  "]"}], "\n"}], "Input",
+ CellChangeTimes->{{3.9581915143740005`*^9, 3.9581915143740005`*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"9ba40135-e224-2c44-8397-25d5dad258d4"],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`L$$ = 28, $CellContext`t$$ = 
+    2.7, $CellContext`vx0$$ = -0.3999999999999999, $CellContext`vy0$$ = \
+-0.19999999999999996`, $CellContext`x0$$ = 0., $CellContext`y0$$ = 
+    0.40000000000000013`, $CellContext`\[Theta]0$$ = 
+    44, $CellContext`\[Phi]$$ = 54, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"sin t\[IAcute]tulo\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`\[Theta]0$$], 20}, 1, 80, 1, ControlType -> 
+      Manipulator}, {{
+       Hold[$CellContext`L$$], 10}, 10, 100, 1, ControlType -> Manipulator}, {{
+       Hold[$CellContext`\[Phi]$$], 45}, 0, 90, 1, ControlType -> 
+      Manipulator}, {{
+       Hold[$CellContext`x0$$], 0.5}, -1, 1, 0.1, ControlType -> 
+      Manipulator}, {{
+       Hold[$CellContext`y0$$], 0}, -1, 1, 0.1, ControlType -> Manipulator}, {{
+       Hold[$CellContext`vx0$$], 0}, -1, 1, 0.1, ControlType -> 
+      Manipulator}, {{
+       Hold[$CellContext`vy0$$], 0.5}, -1, 1, 0.1, ControlType -> 
+      Manipulator}, {
+      Hold[$CellContext`t$$], 0, 10, 0.1, ControlType -> Manipulator}}, 
+    Typeset`size$$ = {600., {296.64823635153266`, 302.3801697770858}}, 
+    Typeset`update$$ = 0, Typeset`initDone$$, Typeset`skipInitDone$$ = True, 
+    Typeset`keyframeActionsQ$$ = False, Typeset`keyframeList$$ = {}}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`L$$ = 10, $CellContext`t$$ = 
+        0, $CellContext`vx0$$ = 0, $CellContext`vy0$$ = 
+        0.5, $CellContext`x0$$ = 0.5, $CellContext`y0$$ = 
+        0, $CellContext`\[Theta]0$$ = 20, $CellContext`\[Phi]$$ = 45}, 
+      "ControllerVariables" :> {}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$, Typeset`keyframeActionsQ$$, 
+        Typeset`keyframeList$$}, "Body" :> 
+      Module[{$CellContext`sol$}, $CellContext`sol$ = \
+$CellContext`solucionCoriolis[$CellContext`L$$, $CellContext`\[Phi]$$ 
+           Degree, $CellContext`x0$$, $CellContext`y0$$, $CellContext`vx0$$, \
+$CellContext`vy0$$]; GraphicsGrid[{{
+            $CellContext`simuladorClasico[$CellContext`\[Theta]0$$ 
+             Degree, $CellContext`L$$, $CellContext`t$$], 
+            $CellContext`graficas[$CellContext`\[Theta]0$$ 
+             Degree, $CellContext`L$$, $CellContext`t$$]}, {
+            $CellContext`visualCoriolis[$CellContext`sol$, $CellContext`L$$, \
+$CellContext`t$$], 
+            Plot[{
+              Part[$CellContext`sol$, 1][$CellContext`\[Tau]], 
+              
+              Part[$CellContext`sol$, 
+               2][$CellContext`\[Tau]]}, {$CellContext`\[Tau], 
+              0, $CellContext`t$$}, PlotRange -> {{-1, 1}}, 
+             PlotStyle -> {Blue, Red}, Frame -> True, 
+             FrameLabel -> {"Tiempo (s)", "X, Y"}]}}]], 
+      "Specifications" :> {{{$CellContext`\[Theta]0$$, 20}, 1, 80, 1, 
+         Appearance -> "Labeled"}, {{$CellContext`L$$, 10}, 10, 100, 1, 
+         Appearance -> "Labeled"}, {{$CellContext`\[Phi]$$, 45}, 0, 90, 1, 
+         Appearance -> "Labeled"}, {{$CellContext`x0$$, 0.5}, -1, 1, 0.1, 
+         Appearance -> "Labeled"}, {{$CellContext`y0$$, 0}, -1, 1, 0.1, 
+         Appearance -> "Labeled"}, {{$CellContext`vx0$$, 0}, -1, 1, 0.1, 
+         Appearance -> "Labeled"}, {{$CellContext`vy0$$, 0.5}, -1, 1, 0.1, 
+         Appearance -> "Labeled"}, {$CellContext`t$$, 0, 10, 0.1}}, 
+      "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{
+      908.2999999046325, {325.2590761952834, 330.99100962083656`}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{{3.9581915334559193`*^9, 3.958191542957943*^9}},
+ CellLabel->"Out[17]=",ExpressionUUID->"773d2548-1069-b340-a8b8-38452cb55451"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Plot", "plld", 
+   "\"Endpoints for \\!\\(\\*RowBox[{\\\"\[Tau]\\\"}]\\) in \\!\\(\\*RowBox[{\
+\\\"{\\\", RowBox[{\\\"\[Tau]\\\", \\\",\\\", \\\"0.`\\\", \\\",\\\", \\\"0\\\
+\"}], \\\"}\\\"}]\\) must have distinct machine-precision numerical \
+values.\"", 2, 18, 13, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.958191697920435*^9},
+ CellLabel->"",ExpressionUUID->"355d2ce4-e00e-8240-b6bc-d969672f8e45"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Plot", "plld", 
+   "\"Endpoints for \\!\\(\\*RowBox[{\\\"\[Tau]\\\"}]\\) in \\!\\(\\*RowBox[{\
+\\\"{\\\", RowBox[{\\\"\[Tau]\\\", \\\",\\\", \\\"0.`\\\", \\\",\\\", \\\"0\\\
+\"}], \\\"}\\\"}]\\) must have distinct machine-precision numerical \
+values.\"", 2, 18, 14, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.9581916979541473`*^9},
+ CellLabel->"",ExpressionUUID->"60b1856f-f094-bf4a-833d-8f25ba5f733a"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Plot", "plld", 
+   "\"Endpoints for \\!\\(\\*RowBox[{\\\"\[Tau]\\\"}]\\) in \\!\\(\\*RowBox[{\
+\\\"{\\\", RowBox[{\\\"\[Tau]\\\", \\\",\\\", \\\"0\\\", \\\",\\\", \\\"0.`\\\
+\"}], \\\"}\\\"}]\\) must have distinct machine-precision numerical \
+values.\"", 2, 18, 15, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.958191697986912*^9},
+ CellLabel->"",ExpressionUUID->"8b2b2144-a1eb-c446-8193-1209931e5bcb"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"Plot\\\", \\\"::\\\", \
+\\\"plld\\\"}], \\\"MessageName\\\"]\\) will be suppressed during this \
+calculation.\"", 2, 18, 16, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.958191698011221*^9},
+ CellLabel->"",ExpressionUUID->"a98725d0-e538-9445-ab09-1ee2d8ce4d79"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "FilterRules", "rep", 
+   "\"\\!\\(\\*RowBox[{\\\"System`Private`SortOptions\\\", \\\"[\\\", \
+\\\"$Failed\\\", \\\"]\\\"}]\\) is not a valid replacement rule.\"", 2, 18, 
+   17, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.9581916981176643`*^9},
+ CellLabel->"",ExpressionUUID->"7e7908aa-f9b0-504a-915b-80d445457ba4"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "FilterRules", "rep", 
+   "\"\\!\\(\\*RowBox[{\\\"System`Private`SortOptions\\\", \\\"[\\\", \
+\\\"$Failed\\\", \\\"]\\\"}]\\) is not a valid replacement rule.\"", 2, 18, 
+   18, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.9581916981343365`*^9},
+ CellLabel->"",ExpressionUUID->"810a936b-ce6d-df4b-9565-b7519d97e337"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "FilterRules", "rep", 
+   "\"\\!\\(\\*RowBox[{\\\"FilterRules\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"System`Private`SortOptions\\\", \\\"[\\\", \
+\\\"$Failed\\\", \\\"]\\\"}], \\\",\\\", RowBox[{\\\"{\\\", \
+RowBox[{\\\"AlignmentPoint\\\", \\\",\\\", \\\"AspectRatio\\\", \\\",\\\", \\\
+\"Axes\\\", \\\",\\\", \\\"AxesLabel\\\", \\\",\\\", \\\"AxesOrigin\\\", \
+\\\",\\\", \\\"AxesStyle\\\", \\\",\\\", \\\"Background\\\", \\\",\\\", \
+\\\"BaselinePosition\\\", \\\",\\\", \\\"BaseStyle\\\", \\\",\\\", \
+\\\"ColorOutput\\\", \\\",\\\", \\\"ContentSelectable\\\", \\\",\\\", \
+\\\"CoordinatesToolOptions\\\", \\\",\\\", \\\"DisplayFunction\\\", \
+\\\",\\\", \\\"Epilog\\\", \\\",\\\", \\\"FormatType\\\", \\\",\\\", \
+\\\"Frame\\\", \\\",\\\", \\\"FrameLabel\\\", \\\",\\\", \\\"FrameStyle\\\", \
+\\\",\\\", \\\"FrameTicks\\\", \\\",\\\", \\\"FrameTicksStyle\\\", \\\",\\\", \
+\\\"GridLines\\\", \\\",\\\", \\\"GridLinesStyle\\\", \\\",\\\", \
+\\\"ImageMargins\\\", \\\",\\\", \\\"ImagePadding\\\", \\\",\\\", \
+\\\"ImageSize\\\", \\\",\\\", \\\"ImageSizeRaw\\\", \\\",\\\", \\\"LabelStyle\
+\\\", \\\",\\\", \\\"Method\\\", \\\",\\\", \\\"PlotLabel\\\", \\\",\\\", \
+\\\"PlotRange\\\", \\\",\\\", \\\"PlotRangeClipping\\\", \\\",\\\", \
+\\\"PlotRangePadding\\\", \\\",\\\", \\\"PlotRegion\\\", \\\",\\\", \
+\\\"PreserveImageOptions\\\", \\\",\\\", \\\"Prolog\\\", \\\",\\\", \
+\\\"RotateLabel\\\", \\\",\\\", \\\"Ticks\\\", \\\",\\\", \
+\\\"TicksStyle\\\"}], \\\"}\\\"}]}], \\\"]\\\"}]\\) is not a valid \
+replacement rule.\"", 2, 18, 19, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.958191698143116*^9},
+ CellLabel->"",ExpressionUUID->"2f357ef3-a02d-5b43-a2ec-9c5c5cb1dcbc"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"FilterRules\\\", \\\"::\
+\\\", \\\"rep\\\"}], \\\"MessageName\\\"]\\) will be suppressed during this \
+calculation.\"", 2, 18, 20, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.958191698183384*^9},
+ CellLabel->"",ExpressionUUID->"31aa1c7f-e959-704c-aea1-09c61ac7d05d"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Lookup", "invrl", 
+   "\"The argument \\!\\(\\*RowBox[{\\\"FilterRules\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"FilterRules\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"System`Private`SortOptions\\\", \\\"[\\\", \
+\\\"$Failed\\\", \\\"]\\\"}], \\\",\\\", RowBox[{\\\"{\\\", \
+RowBox[{\\\"AlignmentPoint\\\", \\\",\\\", \\\"AspectRatio\\\", \\\",\\\", \\\
+\"Axes\\\", \\\",\\\", \\\"AxesLabel\\\", \\\",\\\", \\\"AxesOrigin\\\", \
+\\\",\\\", \\\"AxesStyle\\\", \\\",\\\", \\\"Background\\\", \\\",\\\", \
+\\\"BaselinePosition\\\", \\\",\\\", \\\"BaseStyle\\\", \\\",\\\", \
+\\\"ColorOutput\\\", \\\",\\\", \\\"ContentSelectable\\\", \\\",\\\", \
+\\\"CoordinatesToolOptions\\\", \\\",\\\", \\\"DisplayFunction\\\", \
+\\\",\\\", \\\"Epilog\\\", \\\",\\\", \\\"FormatType\\\", \\\",\\\", \
+\\\"Frame\\\", \\\",\\\", \\\"FrameLabel\\\", \\\",\\\", \\\"FrameStyle\\\", \
+\\\",\\\", \\\"FrameTicks\\\", \\\",\\\", \\\"FrameTicksStyle\\\", \\\",\\\", \
+\\\"GridLines\\\", \\\",\\\", \\\"GridLinesStyle\\\", \\\",\\\", \
+\\\"ImageMargins\\\", \\\",\\\", \\\"ImagePadding\\\", \\\",\\\", \
+\\\"ImageSize\\\", \\\",\\\", \\\"ImageSizeRaw\\\", \\\",\\\", \\\"LabelStyle\
+\\\", \\\",\\\", \\\"Method\\\", \\\",\\\", \\\"PlotLabel\\\", \\\",\\\", \
+\\\"PlotRange\\\", \\\",\\\", \\\"PlotRangeClipping\\\", \\\",\\\", \
+\\\"PlotRangePadding\\\", \\\",\\\", \\\"PlotRegion\\\", \\\",\\\", \
+\\\"PreserveImageOptions\\\", \\\",\\\", \\\"Prolog\\\", \\\",\\\", \
+\\\"RotateLabel\\\", \\\",\\\", \\\"Ticks\\\", \\\",\\\", \
+\\\"TicksStyle\\\"}], \\\"}\\\"}]}], \\\"]\\\"}], \\\",\\\", \
+RowBox[{\\\"{\\\", \\\"ImageSize\\\", \\\"}\\\"}]}], \\\"]\\\"}]\\) is not a \
+valid Association or a list of rules.\"", 2, 18, 21, 33788895507735152192, 
+   "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.9581916982163486`*^9},
+ CellLabel->"",ExpressionUUID->"53591a0e-f0da-c745-b992-48dfd32aa0d6"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Lookup", "invrl", 
+   "\"The argument \\!\\(\\*RowBox[{\\\"FilterRules\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"FilterRules\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"System`Private`SortOptions\\\", \\\"[\\\", \
+\\\"$Failed\\\", \\\"]\\\"}], \\\",\\\", RowBox[{\\\"{\\\", \
+RowBox[{\\\"AlignmentPoint\\\", \\\",\\\", \\\"AspectRatio\\\", \\\",\\\", \\\
+\"Axes\\\", \\\",\\\", \\\"AxesLabel\\\", \\\",\\\", \\\"AxesOrigin\\\", \
+\\\",\\\", \\\"AxesStyle\\\", \\\",\\\", \\\"Background\\\", \\\",\\\", \
+\\\"BaselinePosition\\\", \\\",\\\", \\\"BaseStyle\\\", \\\",\\\", \
+\\\"ColorOutput\\\", \\\",\\\", \\\"ContentSelectable\\\", \\\",\\\", \
+\\\"CoordinatesToolOptions\\\", \\\",\\\", \\\"DisplayFunction\\\", \
+\\\",\\\", \\\"Epilog\\\", \\\",\\\", \\\"FormatType\\\", \\\",\\\", \
+\\\"Frame\\\", \\\",\\\", \\\"FrameLabel\\\", \\\",\\\", \\\"FrameStyle\\\", \
+\\\",\\\", \\\"FrameTicks\\\", \\\",\\\", \\\"FrameTicksStyle\\\", \\\",\\\", \
+\\\"GridLines\\\", \\\",\\\", \\\"GridLinesStyle\\\", \\\",\\\", \
+\\\"ImageMargins\\\", \\\",\\\", \\\"ImagePadding\\\", \\\",\\\", \
+\\\"ImageSize\\\", \\\",\\\", \\\"ImageSizeRaw\\\", \\\",\\\", \\\"LabelStyle\
+\\\", \\\",\\\", \\\"Method\\\", \\\",\\\", \\\"PlotLabel\\\", \\\",\\\", \
+\\\"PlotRange\\\", \\\",\\\", \\\"PlotRangeClipping\\\", \\\",\\\", \
+\\\"PlotRangePadding\\\", \\\",\\\", \\\"PlotRegion\\\", \\\",\\\", \
+\\\"PreserveImageOptions\\\", \\\",\\\", \\\"Prolog\\\", \\\",\\\", \
+\\\"RotateLabel\\\", \\\",\\\", \\\"Ticks\\\", \\\",\\\", \
+\\\"TicksStyle\\\"}], \\\"}\\\"}]}], \\\"]\\\"}], \\\",\\\", \
+RowBox[{\\\"{\\\", \\\"ImageSize\\\", \\\"}\\\"}]}], \\\"]\\\"}]\\) is not a \
+valid Association or a list of rules.\"", 2, 18, 22, 33788895507735152192, 
+   "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.958191698241823*^9},
+ CellLabel->"",ExpressionUUID->"47ebf967-1469-624e-bfde-6facf0b6fdbf"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Lookup", "invrl", 
+   "\"The argument \\!\\(\\*RowBox[{\\\"System`Dump`opts\\\"}]\\) is not a \
+valid Association or a list of rules.\"", 2, 18, 23, 33788895507735152192, 
+   "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.95819169827512*^9},
+ CellLabel->"",ExpressionUUID->"6b6057aa-e4cd-7a4b-8807-5c256e0b9d44"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"Lookup\\\", \\\"::\\\", \
+\\\"invrl\\\"}], \\\"MessageName\\\"]\\) will be suppressed during this \
+calculation.\"", 2, 18, 24, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.958191698308607*^9},
+ CellLabel->"",ExpressionUUID->"410c5e6c-cdc0-4549-8359-3a351495153f"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Plot", "plld", 
+   "\"Endpoints for \\!\\(\\*RowBox[{\\\"\[Tau]\\\"}]\\) in \\!\\(\\*RowBox[{\
+\\\"{\\\", RowBox[{\\\"\[Tau]\\\", \\\",\\\", \\\"0\\\", \\\",\\\", \\\"0.`\\\
+\"}], \\\"}\\\"}]\\) must have distinct machine-precision numerical \
+values.\"", 2, 18, 25, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.9581916986384697`*^9},
+ CellLabel->"",ExpressionUUID->"59b7fe27-b1d8-754a-b483-6dd579c49643"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Plot", "plld", 
+   "\"Endpoints for \\!\\(\\*RowBox[{\\\"\[Tau]\\\"}]\\) in \\!\\(\\*RowBox[{\
+\\\"{\\\", RowBox[{\\\"\[Tau]\\\", \\\",\\\", \\\"0\\\", \\\",\\\", \\\"0.`\\\
+\"}], \\\"}\\\"}]\\) must have distinct machine-precision numerical \
+values.\"", 2, 18, 26, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.9581916986821823`*^9},
+ CellLabel->"",ExpressionUUID->"0e68304a-733f-4f4e-b3f5-27bc59a12964"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Plot", "plld", 
+   "\"Endpoints for \\!\\(\\*RowBox[{\\\"\[Tau]\\\"}]\\) in \\!\\(\\*RowBox[{\
+\\\"{\\\", RowBox[{\\\"\[Tau]\\\", \\\",\\\", \\\"0\\\", \\\",\\\", \\\"0.`\\\
+\"}], \\\"}\\\"}]\\) must have distinct machine-precision numerical \
+values.\"", 2, 18, 27, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.958191698704117*^9},
+ CellLabel->"",ExpressionUUID->"ef6190ee-21e5-ac4c-94e9-cb46be9def51"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"Plot\\\", \\\"::\\\", \
+\\\"plld\\\"}], \\\"MessageName\\\"]\\) will be suppressed during this \
+calculation.\"", 2, 18, 28, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.958191698736944*^9},
+ CellLabel->"",ExpressionUUID->"34e1aa9b-7f46-4f41-8281-6166fe55723a"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "FilterRules", "rep", 
+   "\"\\!\\(\\*RowBox[{\\\"System`Private`SortOptions\\\", \\\"[\\\", \
+\\\"$Failed\\\", \\\"]\\\"}]\\) is not a valid replacement rule.\"", 2, 18, 
+   29, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.9581916987692432`*^9},
+ CellLabel->"",ExpressionUUID->"1bc7ce17-5f11-4241-bca0-2102455bb0e6"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "FilterRules", "rep", 
+   "\"\\!\\(\\*RowBox[{\\\"System`Private`SortOptions\\\", \\\"[\\\", \
+\\\"$Failed\\\", \\\"]\\\"}]\\) is not a valid replacement rule.\"", 2, 18, 
+   30, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.958191698777811*^9},
+ CellLabel->"",ExpressionUUID->"3f0bec60-a107-534d-a054-6b57127081d4"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "FilterRules", "rep", 
+   "\"\\!\\(\\*RowBox[{\\\"FilterRules\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"System`Private`SortOptions\\\", \\\"[\\\", \
+\\\"$Failed\\\", \\\"]\\\"}], \\\",\\\", RowBox[{\\\"{\\\", \
+RowBox[{\\\"AlignmentPoint\\\", \\\",\\\", \\\"AspectRatio\\\", \\\",\\\", \\\
+\"Axes\\\", \\\",\\\", \\\"AxesLabel\\\", \\\",\\\", \\\"AxesOrigin\\\", \
+\\\",\\\", \\\"AxesStyle\\\", \\\",\\\", \\\"Background\\\", \\\",\\\", \
+\\\"BaselinePosition\\\", \\\",\\\", \\\"BaseStyle\\\", \\\",\\\", \
+\\\"ColorOutput\\\", \\\",\\\", \\\"ContentSelectable\\\", \\\",\\\", \
+\\\"CoordinatesToolOptions\\\", \\\",\\\", \\\"DisplayFunction\\\", \
+\\\",\\\", \\\"Epilog\\\", \\\",\\\", \\\"FormatType\\\", \\\",\\\", \
+\\\"Frame\\\", \\\",\\\", \\\"FrameLabel\\\", \\\",\\\", \\\"FrameStyle\\\", \
+\\\",\\\", \\\"FrameTicks\\\", \\\",\\\", \\\"FrameTicksStyle\\\", \\\",\\\", \
+\\\"GridLines\\\", \\\",\\\", \\\"GridLinesStyle\\\", \\\",\\\", \
+\\\"ImageMargins\\\", \\\",\\\", \\\"ImagePadding\\\", \\\",\\\", \
+\\\"ImageSize\\\", \\\",\\\", \\\"ImageSizeRaw\\\", \\\",\\\", \\\"LabelStyle\
+\\\", \\\",\\\", \\\"Method\\\", \\\",\\\", \\\"PlotLabel\\\", \\\",\\\", \
+\\\"PlotRange\\\", \\\",\\\", \\\"PlotRangeClipping\\\", \\\",\\\", \
+\\\"PlotRangePadding\\\", \\\",\\\", \\\"PlotRegion\\\", \\\",\\\", \
+\\\"PreserveImageOptions\\\", \\\",\\\", \\\"Prolog\\\", \\\",\\\", \
+\\\"RotateLabel\\\", \\\",\\\", \\\"Ticks\\\", \\\",\\\", \
+\\\"TicksStyle\\\"}], \\\"}\\\"}]}], \\\"]\\\"}]\\) is not a valid \
+replacement rule.\"", 2, 18, 31, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.958191698802347*^9},
+ CellLabel->"",ExpressionUUID->"327e9d0b-d54a-954c-8fd6-f27338267e8b"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"FilterRules\\\", \\\"::\
+\\\", \\\"rep\\\"}], \\\"MessageName\\\"]\\) will be suppressed during this \
+calculation.\"", 2, 18, 32, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.9581916988275337`*^9},
+ CellLabel->"",ExpressionUUID->"1212f366-a03b-ed4a-a3db-0e32e8d92706"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Lookup", "invrl", 
+   "\"The argument \\!\\(\\*RowBox[{\\\"FilterRules\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"FilterRules\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"System`Private`SortOptions\\\", \\\"[\\\", \
+\\\"$Failed\\\", \\\"]\\\"}], \\\",\\\", RowBox[{\\\"{\\\", \
+RowBox[{\\\"AlignmentPoint\\\", \\\",\\\", \\\"AspectRatio\\\", \\\",\\\", \\\
+\"Axes\\\", \\\",\\\", \\\"AxesLabel\\\", \\\",\\\", \\\"AxesOrigin\\\", \
+\\\",\\\", \\\"AxesStyle\\\", \\\",\\\", \\\"Background\\\", \\\",\\\", \
+\\\"BaselinePosition\\\", \\\",\\\", \\\"BaseStyle\\\", \\\",\\\", \
+\\\"ColorOutput\\\", \\\",\\\", \\\"ContentSelectable\\\", \\\",\\\", \
+\\\"CoordinatesToolOptions\\\", \\\",\\\", \\\"DisplayFunction\\\", \
+\\\",\\\", \\\"Epilog\\\", \\\",\\\", \\\"FormatType\\\", \\\",\\\", \
+\\\"Frame\\\", \\\",\\\", \\\"FrameLabel\\\", \\\",\\\", \\\"FrameStyle\\\", \
+\\\",\\\", \\\"FrameTicks\\\", \\\",\\\", \\\"FrameTicksStyle\\\", \\\",\\\", \
+\\\"GridLines\\\", \\\",\\\", \\\"GridLinesStyle\\\", \\\",\\\", \
+\\\"ImageMargins\\\", \\\",\\\", \\\"ImagePadding\\\", \\\",\\\", \
+\\\"ImageSize\\\", \\\",\\\", \\\"ImageSizeRaw\\\", \\\",\\\", \\\"LabelStyle\
+\\\", \\\",\\\", \\\"Method\\\", \\\",\\\", \\\"PlotLabel\\\", \\\",\\\", \
+\\\"PlotRange\\\", \\\",\\\", \\\"PlotRangeClipping\\\", \\\",\\\", \
+\\\"PlotRangePadding\\\", \\\",\\\", \\\"PlotRegion\\\", \\\",\\\", \
+\\\"PreserveImageOptions\\\", \\\",\\\", \\\"Prolog\\\", \\\",\\\", \
+\\\"RotateLabel\\\", \\\",\\\", \\\"Ticks\\\", \\\",\\\", \
+\\\"TicksStyle\\\"}], \\\"}\\\"}]}], \\\"]\\\"}], \\\",\\\", \
+RowBox[{\\\"{\\\", \\\"ImageSize\\\", \\\"}\\\"}]}], \\\"]\\\"}]\\) is not a \
+valid Association or a list of rules.\"", 2, 18, 33, 33788895507735152192, 
+   "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.958191698860401*^9},
+ CellLabel->"",ExpressionUUID->"d929a702-b1ab-8f40-a373-40d89032f6a8"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Lookup", "invrl", 
+   "\"The argument \\!\\(\\*RowBox[{\\\"FilterRules\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"FilterRules\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"System`Private`SortOptions\\\", \\\"[\\\", \
+\\\"$Failed\\\", \\\"]\\\"}], \\\",\\\", RowBox[{\\\"{\\\", \
+RowBox[{\\\"AlignmentPoint\\\", \\\",\\\", \\\"AspectRatio\\\", \\\",\\\", \\\
+\"Axes\\\", \\\",\\\", \\\"AxesLabel\\\", \\\",\\\", \\\"AxesOrigin\\\", \
+\\\",\\\", \\\"AxesStyle\\\", \\\",\\\", \\\"Background\\\", \\\",\\\", \
+\\\"BaselinePosition\\\", \\\",\\\", \\\"BaseStyle\\\", \\\",\\\", \
+\\\"ColorOutput\\\", \\\",\\\", \\\"ContentSelectable\\\", \\\",\\\", \
+\\\"CoordinatesToolOptions\\\", \\\",\\\", \\\"DisplayFunction\\\", \
+\\\",\\\", \\\"Epilog\\\", \\\",\\\", \\\"FormatType\\\", \\\",\\\", \
+\\\"Frame\\\", \\\",\\\", \\\"FrameLabel\\\", \\\",\\\", \\\"FrameStyle\\\", \
+\\\",\\\", \\\"FrameTicks\\\", \\\",\\\", \\\"FrameTicksStyle\\\", \\\",\\\", \
+\\\"GridLines\\\", \\\",\\\", \\\"GridLinesStyle\\\", \\\",\\\", \
+\\\"ImageMargins\\\", \\\",\\\", \\\"ImagePadding\\\", \\\",\\\", \
+\\\"ImageSize\\\", \\\",\\\", \\\"ImageSizeRaw\\\", \\\",\\\", \\\"LabelStyle\
+\\\", \\\",\\\", \\\"Method\\\", \\\",\\\", \\\"PlotLabel\\\", \\\",\\\", \
+\\\"PlotRange\\\", \\\",\\\", \\\"PlotRangeClipping\\\", \\\",\\\", \
+\\\"PlotRangePadding\\\", \\\",\\\", \\\"PlotRegion\\\", \\\",\\\", \
+\\\"PreserveImageOptions\\\", \\\",\\\", \\\"Prolog\\\", \\\",\\\", \
+\\\"RotateLabel\\\", \\\",\\\", \\\"Ticks\\\", \\\",\\\", \
+\\\"TicksStyle\\\"}], \\\"}\\\"}]}], \\\"]\\\"}], \\\",\\\", \
+RowBox[{\\\"{\\\", \\\"ImageSize\\\", \\\"}\\\"}]}], \\\"]\\\"}]\\) is not a \
+valid Association or a list of rules.\"", 2, 18, 34, 33788895507735152192, 
+   "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.958191698885521*^9},
+ CellLabel->"",ExpressionUUID->"faad22a7-9266-c74e-9640-ebbc38cfab26"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Lookup", "invrl", 
+   "\"The argument \\!\\(\\*RowBox[{\\\"System`Dump`opts\\\"}]\\) is not a \
+valid Association or a list of rules.\"", 2, 18, 35, 33788895507735152192, 
+   "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.958191698918499*^9},
+ CellLabel->"",ExpressionUUID->"a004004c-664d-dc42-a43d-db29b9f76b67"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"Lookup\\\", \\\"::\\\", \
+\\\"invrl\\\"}], \\\"MessageName\\\"]\\) will be suppressed during this \
+calculation.\"", 2, 18, 36, 33788895507735152192, "Local"},
+  "MessageTemplate",
+  BaseStyle->"MSG"]], "Message",
+ CellChangeTimes->{3.9581916989510326`*^9},
+ CellLabel->"",ExpressionUUID->"f6bd5269-5dd6-5342-8811-6e2d38684208"]
+}, Open  ]]
+},
+WindowSize->{1152, 579.6},
+WindowMargins->{{
+  Automatic, -5.399999999999864}, {-5.399999999999977, Automatic}},
+FrontEndVersion->"14.2 para Microsoft Windows (64-bit) (December 26, 2024)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"b47e8243-a305-a045-97ba-aad2a2933fc2"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[576, 22, 17042, 468, 1484, "Input",ExpressionUUID->"9ba40135-e224-2c44-8397-25d5dad258d4"],
+Cell[17621, 492, 4368, 80, 673, "Output",ExpressionUUID->"773d2548-1069-b340-a8b8-38452cb55451"],
+Cell[21992, 574, 497, 10, 26, "Message",ExpressionUUID->"355d2ce4-e00e-8240-b6bc-d969672f8e45"],
+Cell[22492, 586, 499, 10, 26, "Message",ExpressionUUID->"60b1856f-f094-bf4a-833d-8f25ba5f733a"],
+Cell[22994, 598, 497, 10, 26, "Message",ExpressionUUID->"8b2b2144-a1eb-c446-8193-1209931e5bcb"],
+Cell[23494, 610, 428, 9, 26, "Message",ExpressionUUID->"a98725d0-e538-9445-ab09-1ee2d8ce4d79"],
+Cell[23925, 621, 410, 9, 26, "Message",ExpressionUUID->"7e7908aa-f9b0-504a-915b-80d445457ba4"],
+Cell[24338, 632, 410, 9, 26, "Message",ExpressionUUID->"810a936b-ce6d-df4b-9565-b7519d97e337"],
+Cell[24751, 643, 1767, 28, 82, "Message",ExpressionUUID->"2f357ef3-a02d-5b43-a2ec-9c5c5cb1dcbc"],
+Cell[26521, 673, 434, 9, 26, "Message",ExpressionUUID->"31aa1c7f-e959-704c-aea1-09c61ac7d05d"],
+Cell[26958, 684, 1926, 31, 102, "Message",ExpressionUUID->"53591a0e-f0da-c745-b992-48dfd32aa0d6"],
+Cell[28887, 717, 1924, 31, 102, "Message",ExpressionUUID->"47ebf967-1469-624e-bfde-6facf0b6fdbf"],
+Cell[30814, 750, 382, 9, 26, "Message",ExpressionUUID->"6b6057aa-e4cd-7a4b-8807-5c256e0b9d44"],
+Cell[31199, 761, 431, 9, 26, "Message",ExpressionUUID->"410c5e6c-cdc0-4549-8359-3a351495153f"],
+Cell[31633, 772, 499, 10, 26, "Message",ExpressionUUID->"59b7fe27-b1d8-754a-b483-6dd579c49643"],
+Cell[32135, 784, 499, 10, 26, "Message",ExpressionUUID->"0e68304a-733f-4f4e-b3f5-27bc59a12964"],
+Cell[32637, 796, 497, 10, 26, "Message",ExpressionUUID->"ef6190ee-21e5-ac4c-94e9-cb46be9def51"],
+Cell[33137, 808, 428, 9, 26, "Message",ExpressionUUID->"34e1aa9b-7f46-4f41-8281-6166fe55723a"],
+Cell[33568, 819, 410, 9, 26, "Message",ExpressionUUID->"1bc7ce17-5f11-4241-bca0-2102455bb0e6"],
+Cell[33981, 830, 408, 9, 26, "Message",ExpressionUUID->"3f0bec60-a107-534d-a054-6b57127081d4"],
+Cell[34392, 841, 1767, 28, 82, "Message",ExpressionUUID->"327e9d0b-d54a-954c-8fd6-f27338267e8b"],
+Cell[36162, 871, 436, 9, 26, "Message",ExpressionUUID->"1212f366-a03b-ed4a-a3db-0e32e8d92706"],
+Cell[36601, 882, 1924, 31, 102, "Message",ExpressionUUID->"d929a702-b1ab-8f40-a373-40d89032f6a8"],
+Cell[38528, 915, 1924, 31, 102, "Message",ExpressionUUID->"faad22a7-9266-c74e-9640-ebbc38cfab26"],
+Cell[40455, 948, 383, 9, 26, "Message",ExpressionUUID->"a004004c-664d-dc42-a43d-db29b9f76b67"],
+Cell[40841, 959, 433, 9, 26, "Message",ExpressionUUID->"f6bd5269-5dd6-5342-8811-6e2d38684208"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+
